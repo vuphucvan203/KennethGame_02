@@ -9,6 +9,7 @@ public class WeaponChange : MonoBehaviour
 {
     public TMP_Dropdown weaponDropdown;
     public WeaponType selectedWeapon;
+    public bool isChanged;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class WeaponChange : MonoBehaviour
 
     protected void OnSelectedWeapon(int index)
     {
+        isChanged = true;
         switch(index)
         {
             case 0:
@@ -29,7 +31,7 @@ public class WeaponChange : MonoBehaviour
                 selectedWeapon = WeaponType.Gun;
                 break;
             case 3:
-                selectedWeapon = WeaponType.MachineGun;
+                selectedWeapon = WeaponType.Riffle;
                 break;
             case 4:
                 selectedWeapon = WeaponType.Flamethrower;

@@ -7,7 +7,7 @@ public enum WeaponType
     Knife,
     Bat,
     Gun, 
-    MachineGun,
+    Riffle,
     Flamethrower,
 }
 
@@ -16,6 +16,7 @@ public class PlayerController : KennMonoBehaviour
     [SerializeField] protected VariableJoystick joystick;
     [SerializeField] protected AttackAction attackAction;
     [SerializeField] protected WeaponChange weaponChange;
+    public WeaponChange WeaponChange => weaponChange;
     [SerializeField] protected Rigidbody2D rig;
     public delegate void IdleStrategy(WeaponType type);
     public IdleStrategy idleTrigger;
@@ -23,7 +24,7 @@ public class PlayerController : KennMonoBehaviour
     public MoveStrategy moveTrigger;
     public delegate void AttackStrategy(WeaponType type);
     public AttackStrategy attackTrigger;
-    [SerializeField] protected WeaponType currentWeapon;
+    public bool finishAttack;
 
     private void Update()
     {
