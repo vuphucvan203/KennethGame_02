@@ -2,46 +2,78 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponType
+public class PlayerController : Controller
 {
-    Knife,
-    Bat,
-    Gun, 
-    Riffle,
-    Flamethrower,
-}
-
-public class PlayerController : KennMonoBehaviour
-{
+    [SerializeField] protected SoldierType soldierType;
+    [SerializeField] protected CompanionAI companionAI;
     [SerializeField] protected VariableJoystick joystick;
     [SerializeField] protected AttackAction attackAction;
     [SerializeField] protected WeaponChange weaponChange;
     public WeaponChange WeaponChange => weaponChange;
-    [SerializeField] protected Rigidbody2D rig;
-    public delegate void IdleStrategy(WeaponType type);
-    public IdleStrategy idleTrigger;
-    public delegate void MoveStrategy(WeaponType type);
-    public MoveStrategy moveTrigger;
-    public delegate void AttackStrategy(WeaponType type);
-    public AttackStrategy attackTrigger;
-    public bool finishAttack;
+    protected Jack jack;
+    protected Linda linda;
+    
 
     private void Update()
     {
+        WeaponUpdate();
+        SelectSoldier();
         AttackExcute();
         MoveExcute();
         IdleExcute();
     }
+
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        jack = FindAnyObjectByType<Jack>();
+        linda = FindAnyObjectByType<Linda>();
+        companionAI = FindAnyObjectByType<CompanionAI>();
+        joystick = FindAnyObjectByType<VariableJoystick>();
+        attackAction = FindAnyObjectByType<AttackAction>();
+        weaponChange = FindAnyObjectByType<WeaponChange>();
+    }
+
+    protected void WeaponUpdate()
+    {
+        if (weaponChange.isChanged)
+        {
+            weaponChange.isChanged = false;
+            changeWeapon = true;
+        } 
+            
+    }    
+
+    protected void SelectSoldier()
+    {
+        if (soldierType == SoldierType.Jack)
+        {
+            soldier = jack;
+            soldier.SetController(ControllerType.Player);
+            companionAI.SelectSoldier(linda);
+        }
+        else
+        {
+            soldier = linda;
+            soldier.SetController(ControllerType.Player);
+            companionAI.SelectSoldier(jack);
+        }
+    }    
 
     protected void MoveExcute()
     {
         if (joystick.Direction != Vector2.zero)
         {
             Vector2 direction = new Vector2(joystick.Horizontal, joystick.Vertical);
-            rig.velocity = direction * 10f;
-            moveTrigger?.Invoke(weaponChange.selectedWeapon);
+            soldier.Rig.velocity = direction * 10f;
+            if (direction.sqrMagnitude > 0.1f)
+            {
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                soldier.Rig.transform.rotation = Quaternion.Euler(0, 0, angle + 90);
+            }
+            soldier.StateTrigger.ActiveMove(weaponChange.selectedWeapon);
         }
-        else rig.velocity = Vector2.zero;
+        else soldier.Rig.velocity = Vector2.zero;
     }   
     
     protected void AttackExcute()
@@ -49,7 +81,7 @@ public class PlayerController : KennMonoBehaviour
         if(attackAction.isExcute)
         {
             attackAction.isExcute = false;
-            attackTrigger?.Invoke(weaponChange.selectedWeapon);
+            soldier.StateTrigger.ActiveAttack(weaponChange.selectedWeapon);
         }
     }
 
@@ -57,7 +89,12 @@ public class PlayerController : KennMonoBehaviour
     {
         if(joystick.Direction == Vector2.zero && !attackAction.isExcute)
         {
-            idleTrigger?.Invoke(weaponChange.selectedWeapon);
+            soldier.StateTrigger.ActiveIdle(weaponChange.selectedWeapon);
         }    
-    }    
+    }
+
+    public override void SelectSoldier(Soldier selectedSoldier)
+    {
+        
+    }
 }
