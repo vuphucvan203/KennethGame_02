@@ -28,6 +28,7 @@ public abstract class EnemyAI : KennMonoBehaviour
     [SerializeField] protected AttackType attack;
     public AttackType AttackType => attack;
     [SerializeField] protected float timer, cooldown;
+
     public bool startCooldown { get; set; }
 
     protected override void Start()
@@ -53,7 +54,7 @@ public abstract class EnemyAI : KennMonoBehaviour
     protected virtual void MakeDecision()
     {
         StartCooldown(cooldown);
-    }    
+    }
 
     protected void MoveExcute()
     {
@@ -62,7 +63,11 @@ public abstract class EnemyAI : KennMonoBehaviour
 
     protected void AttackExcute()
     {
-        if (action== StateAction.Attack) stateTrigger.ActiveAttack();
+        if (action == StateAction.Attack)
+        {
+            enemy.currentAttack = attack;
+            stateTrigger.ActiveAttack();
+        }
     }
 
     public void StartCooldown(float cooldown)

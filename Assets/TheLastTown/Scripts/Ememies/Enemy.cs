@@ -21,12 +21,14 @@ public abstract class Enemy : Character
     [SerializeField] protected EnemyStateTrigger stateTrigger;
     public EnemyStateTrigger StateTrigger => stateTrigger;
     [SerializeField] protected IEnemyAttackStrategy attackStrategy;
-    public IEnemyAttackStrategy AttackStrategy => attackStrategy;
+    public AttackType currentAttack;
 
-    protected Enemy(string name) : base(name)
+    protected Enemy(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
 
     }
+
+    public IEnemyAttackStrategy AttackStrategy => attackStrategy;
 
     protected override void LoadComponent()
     {

@@ -18,17 +18,21 @@ public abstract class Soldier : Character
     public SoldierStateMachine StateMachine => stateMachine;
     [SerializeField] protected Rigidbody2D rig;
     public Rigidbody2D Rig => rig;
+    protected BaseStats level;
+    protected BaseStats experience;
     protected IIdleStrategy idleStrategy;
     public IIdleStrategy IdleStrategy => idleStrategy;
     protected IMoveStrategy moveStrategy;
     public IMoveStrategy MoveStrategy => moveStrategy;
     protected ISoldierAttackStrategy attackStrategy;
     public ISoldierAttackStrategy AttackStrategy => attackStrategy;
+    public WeaponType currentWeapon { get; set; }
 
 
-    protected Soldier(string name) : base(name)
+    protected Soldier(string name, BaseStats level, BaseStats experience, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
-
+        this.level = level;
+        this.experience = experience;
     }
 
     protected override void LoadComponent()
@@ -78,5 +82,10 @@ public abstract class Soldier : Character
             controller = FindAnyObjectByType<PlayerController>();
         }
         else controller = FindAnyObjectByType<CompanionAI>();
+    }    
+
+    public virtual void Attack(WeaponType weapon)
+    {
+
     }    
 }

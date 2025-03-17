@@ -18,7 +18,7 @@ MonoBehaviour:
     duringTime: 0.2
   Attack:
   - name: AAS_MeleeAttack
-    duringTime: 0.2
+    duringTime: 0.5
   - name: AAS_SmallAcidAttack
     duringTime: 0.2
   - name: AAS_BigAcidAttack

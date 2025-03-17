@@ -12,8 +12,13 @@ public enum MindlessZombieType
 
 public class MindlessZombie : Enemy
 {
-    public MindlessZombie(string name) : base(name)
+    public MindlessZombie(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
-        
+
+    }
+
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
     }
 }

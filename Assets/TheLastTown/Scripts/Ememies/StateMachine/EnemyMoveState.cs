@@ -12,7 +12,8 @@ public class EnemyMoveState : EnemyBaseState, IState
     public void Enter()
     {
         State move = stateMachine.Move[0];
-        stateMachine.Animator.CrossFade(move.name, move.duringTime);
+        stateMachine.Animator.Play(move.name);
+        //stateMachine.Animator.CrossFade(move.name, move.duringTime);
         stateMachine.Enemy.StateTrigger.AttackTrigger += AttackHandle;
     }
 

@@ -36,15 +36,15 @@ MonoBehaviour:
     duringTime: 0.2
   Attack:
   - name: J_Attack_knife
-    duringTime: 0.2
+    duringTime: 0.5
   - name: J_Attack_bat
-    duringTime: 0.2
+    duringTime: 0.5
   - name: J_Attack_gun
     duringTime: 0.2
   - name: J_Attack_riffle
     duringTime: 0.2
   - name: J_Attack_flamethrower
-    duringTime: 0.2
+    duringTime: 0.5
   Death:
   - name: J_Death
     duringTime: 0.2

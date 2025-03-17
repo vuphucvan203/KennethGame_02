@@ -10,6 +10,7 @@ public class PlayerController : Controller
     [SerializeField] protected AttackAction attackAction;
     [SerializeField] protected WeaponChange weaponChange;
     public WeaponChange WeaponChange => weaponChange;
+    [SerializeField] protected PlayerHealthBar heathBar;
     protected Jack jack;
     protected Linda linda;
     
@@ -18,6 +19,7 @@ public class PlayerController : Controller
     {
         WeaponUpdate();
         SelectSoldier();
+        heathBar.SetSliderValue(soldier.Health.Percent);
         AttackExcute();
         MoveExcute();
         IdleExcute();
@@ -32,16 +34,17 @@ public class PlayerController : Controller
         joystick = FindAnyObjectByType<VariableJoystick>();
         attackAction = FindAnyObjectByType<AttackAction>();
         weaponChange = FindAnyObjectByType<WeaponChange>();
+        heathBar = FindAnyObjectByType<PlayerHealthBar>();
     }
 
     protected void WeaponUpdate()
     {
         if (weaponChange.isChanged)
         {
+            soldier.currentWeapon = WeaponChange.selectedWeapon;
             weaponChange.isChanged = false;
             changeWeapon = true;
         } 
-            
     }    
 
     protected void SelectSoldier()

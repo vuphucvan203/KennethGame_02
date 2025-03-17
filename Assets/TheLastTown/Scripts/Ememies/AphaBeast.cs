@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class AlphaBeast : Enemy
 {
-    public AlphaBeast(string name) : base(name)
+    public AlphaBeast(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
-        
+
+    }
+
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
     }
 }

@@ -9,7 +9,6 @@ public class EnemyAttackState : EnemyBaseState, IState
 
     public EnemyAttackState(AttackType type, EnemyStateMachine stateMachine) : base(stateMachine)
     {
-        Debug.Log(type);
         attackType = type;
     }
 

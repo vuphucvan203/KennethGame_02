@@ -20,6 +20,7 @@ public enum ControllerType
 public abstract class Controller : KennMonoBehaviour
 {
     [SerializeField] protected Soldier soldier;
+    public Soldier Soldier => soldier;
     public bool changeWeapon;
 
     public abstract void SelectSoldier(Soldier selectedSoldier);

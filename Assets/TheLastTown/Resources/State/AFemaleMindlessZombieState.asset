@@ -18,7 +18,7 @@ MonoBehaviour:
     duringTime: 0.2
   Attack:
   - name: AFemale_MZ_Attack
-    duringTime: 0.2
+    duringTime: 0.05
   Death:
   - name: AFemale_MZ_Death
     duringTime: 0.2

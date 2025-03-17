@@ -12,7 +12,8 @@ public class MeleeAttack : IEnemyAttackStrategy
     public void SelectStrategy(Enemy enemy)
     {
         State attack = enemy.StateMachine.Attack[0];
-        enemy.StateMachine.Animator.CrossFade(attack.name, attack.duringTime);
+        //enemy.StateMachine.Animator.CrossFade(attack.name, attack.duringTime);
+        enemy.StateMachine.Animator.Play(attack.name);
     }
 }
 

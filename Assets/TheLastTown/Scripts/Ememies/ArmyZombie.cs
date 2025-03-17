@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class ArmyZombie : Enemy
 {
-    public ArmyZombie(string name) : base(name)
+    public ArmyZombie(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
-        
+
+    }
+
+    public override void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
     }
 }
