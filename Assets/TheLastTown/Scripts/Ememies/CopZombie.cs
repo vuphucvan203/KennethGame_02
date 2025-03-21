@@ -10,6 +10,12 @@ public class CopZombie : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.CopZombie);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

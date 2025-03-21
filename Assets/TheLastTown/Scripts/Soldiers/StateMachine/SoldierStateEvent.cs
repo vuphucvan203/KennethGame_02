@@ -1,17 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SoldierStateEvent : MonoBehaviour
 {
     [SerializeField] protected SoldierStateMachine stateMachine;
     [SerializeField] protected WeaponCollider[] colliders;
+    [SerializeField] protected WeaponRaycast[] raycasts;
 
 
     private void Awake()
     {
         stateMachine = GetComponentInParent<SoldierStateMachine>();
         LoadWeaponCollider();
+        LoadWeaponRaycast();
     }
 
     protected void LoadWeaponCollider()
@@ -21,6 +21,15 @@ public class SoldierStateEvent : MonoBehaviour
         {
             collider.gameObject.SetActive(false);
         }
+    }    
+
+    protected void LoadWeaponRaycast()
+    {
+        raycasts = GetComponentsInChildren<WeaponRaycast>();
+        foreach (WeaponRaycast raycast in raycasts)
+        {
+            raycast.gameObject.SetActive(false);
+        }    
     }    
 
     public void FinishAttack()
@@ -56,5 +65,29 @@ public class SoldierStateEvent : MonoBehaviour
     public void DisableFlamethrower()
     {
         colliders[2].gameObject.SetActive(false);
+    }
+
+    public void EnableGun()
+    {
+        raycasts[0].gameObject.SetActive(true);
+        raycasts[0].RaycastActive();
+    }
+
+    public void DisableGun()
+    {
+        raycasts[0].gameObject.SetActive(false);
+    }
+
+    public void EnableRifle()
+    {
+        WeaponRaycast raycast = raycasts[1];
+        raycast.gameObject.SetActive(true);
+        for (int i = 0; i < raycast.amount; i++)
+            raycasts[1].RaycastActive();
+    }
+
+    public void DisableRiffle()
+    {
+        raycasts[1].gameObject.SetActive(false);
     }
 }

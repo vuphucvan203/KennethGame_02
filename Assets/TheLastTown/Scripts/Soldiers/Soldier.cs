@@ -41,7 +41,7 @@ public abstract class Soldier : Character
         stateTrigger = GetComponent<SoldierStateTrigger>();
         stateMachine = GetComponent<SoldierStateMachine>();
         rig = GetComponentInChildren<SpriteRenderer>().GetComponent<Rigidbody2D>();
-    }
+    }  
 
     public void SetStategy(WeaponType weapon)
     {

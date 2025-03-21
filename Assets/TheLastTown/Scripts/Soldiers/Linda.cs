@@ -9,6 +9,12 @@ public class Linda : Soldier
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.Linda);
+    }
+
     public override void Accept(IVisitor visitor)
     {   
         visitor.Visit(this);

@@ -9,6 +9,12 @@ public class AlphaBeast : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.AlphaBeast);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

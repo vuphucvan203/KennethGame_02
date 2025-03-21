@@ -15,6 +15,12 @@ public class FleshThrower : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.FleshThrower);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

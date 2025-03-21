@@ -10,6 +10,12 @@ public class ArmyZombie : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.ArmyZombie);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

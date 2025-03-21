@@ -20,7 +20,6 @@ public class WeaponCollider : KennMonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.name);
         if (other.TryGetComponent<BodyCollider>(out BodyCollider body))
         {
             if (body.colliderDefind != colliderTarget) return;

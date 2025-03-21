@@ -15,6 +15,12 @@ public class AcidSpitter : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.AcidSpitter);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

@@ -17,6 +17,12 @@ public class MindlessZombie : Enemy
 
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        LoadBaseStats(CharacterType.MindlessZombie);
+    }
+
     public override void Accept(IVisitor visitor)
     {
         visitor.Visit(this);

@@ -11,10 +11,11 @@ public class BaseStats
     [SerializeField] protected int value;
     public int Value => value;
 
-    public BaseStats(string name, int val)
+    public BaseStats(string name, int value, int maxValue)
     {
-        statsName = name;
-        value = maxValue = val;
+        this.statsName = name;
+        this.value = value;
+        this.maxValue = maxValue;
     }    
 
 
