@@ -18,6 +18,7 @@ public abstract class Soldier : Character
     public SoldierStateMachine StateMachine => stateMachine;
     [SerializeField] protected Rigidbody2D rig;
     public Rigidbody2D Rig => rig;
+    public Inventory inventory;
     protected BaseStats level;
     protected BaseStats experience;
     protected IIdleStrategy idleStrategy;
@@ -38,9 +39,10 @@ public abstract class Soldier : Character
     protected override void LoadComponent()
     {
         base.LoadComponent();
+        inventory = GetComponent<Inventory>();
         stateTrigger = GetComponent<SoldierStateTrigger>();
         stateMachine = GetComponent<SoldierStateMachine>();
-        rig = GetComponentInChildren<SpriteRenderer>().GetComponent<Rigidbody2D>();
+        rig = GetComponent<Rigidbody2D>();
     }  
 
     public void SetStategy(WeaponType weapon)

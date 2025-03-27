@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : Controller
 {
+    [SerializeField] protected Player player;
+    public Player Player => player;
     [SerializeField] protected SoldierType soldierType;
     [SerializeField] protected CompanionAI companionAI;
     [SerializeField] protected VariableJoystick joystick;
@@ -13,6 +15,7 @@ public class PlayerController : Controller
     [SerializeField] protected PlayerHealthBar heathBar;
     protected Jack jack;
     protected Linda linda;
+    public float cooldownAttack;
     
 
     private void Update()
@@ -28,6 +31,7 @@ public class PlayerController : Controller
     protected override void LoadComponent()
     {
         base.LoadComponent();
+        player = FindObjectOfType<Player>();
         jack = FindAnyObjectByType<Jack>();
         linda = FindAnyObjectByType<Linda>();
         companionAI = FindAnyObjectByType<CompanionAI>();
@@ -81,7 +85,7 @@ public class PlayerController : Controller
     
     protected void AttackExcute()
     {
-        if(attackAction.isExcute)
+        if (attackAction.isExcute)
         {
             attackAction.isExcute = false;
             soldier.StateTrigger.ActiveAttack(weaponChange.selectedWeapon);

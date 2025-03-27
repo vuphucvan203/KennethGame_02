@@ -19,5 +19,5 @@ public class BodyCollider : KennMonoBehaviour
     {
         int damageReduce = damage - character.ApplyDefenseStats(damage);
         character.Health.DecreaseStats(damageReduce);
-    }    
+    }
 }
