@@ -10,8 +10,10 @@ public class PlayerController : Controller
     [SerializeField] protected CompanionAI companionAI;
     [SerializeField] protected VariableJoystick joystick;
     [SerializeField] protected AttackAction attackAction;
-    [SerializeField] protected WeaponChange weaponChange;
-    public WeaponChange WeaponChange => weaponChange;
+    //[SerializeField] protected WeaponChange weaponChange;
+    //public WeaponChange WeaponChange => weaponChange;
+    [SerializeField] protected ScrollWeapon scrollWeapon;
+    public ScrollWeapon ScrollWeapon => scrollWeapon;
     [SerializeField] protected PlayerHealthBar heathBar;
     protected Jack jack;
     protected Linda linda;
@@ -37,16 +39,17 @@ public class PlayerController : Controller
         companionAI = FindAnyObjectByType<CompanionAI>();
         joystick = FindAnyObjectByType<VariableJoystick>();
         attackAction = FindAnyObjectByType<AttackAction>();
-        weaponChange = FindAnyObjectByType<WeaponChange>();
+        //weaponChange = FindAnyObjectByType<WeaponChange>();
+        scrollWeapon = FindAnyObjectByType<ScrollWeapon>();
         heathBar = FindAnyObjectByType<PlayerHealthBar>();
     }
 
     protected void WeaponUpdate()
     {
-        if (weaponChange.isChanged)
+        if (scrollWeapon.isChanged)
         {
-            soldier.currentWeapon = WeaponChange.selectedWeapon;
-            weaponChange.isChanged = false;
+            soldier.currentWeapon = ScrollWeapon.selectedWeapon;
+            scrollWeapon.isChanged = false;
             changeWeapon = true;
         } 
     }    
@@ -78,7 +81,7 @@ public class PlayerController : Controller
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
                 soldier.Rig.transform.rotation = Quaternion.Euler(0, 0, angle + 90);
             }
-            soldier.StateTrigger.ActiveMove(weaponChange.selectedWeapon);
+            soldier.StateTrigger.ActiveMove(scrollWeapon.selectedWeapon);
         }
         else soldier.Rig.velocity = Vector2.zero;
     }   
@@ -88,7 +91,7 @@ public class PlayerController : Controller
         if (attackAction.isExcute)
         {
             attackAction.isExcute = false;
-            soldier.StateTrigger.ActiveAttack(weaponChange.selectedWeapon);
+            soldier.StateTrigger.ActiveAttack(scrollWeapon.selectedWeapon);
         }
     }
 
@@ -96,7 +99,7 @@ public class PlayerController : Controller
     {
         if(joystick.Direction == Vector2.zero && !attackAction.isExcute)
         {
-            soldier.StateTrigger.ActiveIdle(weaponChange.selectedWeapon);
+            soldier.StateTrigger.ActiveIdle(scrollWeapon.selectedWeapon);
         }    
     }
 

@@ -19,14 +19,19 @@ public class WeaponRaycast : KennMonoBehaviour
         Ray2D ray = new Ray2D(transform.position, -transform.up);
         Debug.DrawRay(ray.origin, ray.direction * 10, Color.red);
 
-        RaycastHit2D hit  = Physics2D.Raycast(ray.origin, ray.direction, 20f);
-        if (hit.collider == null) return;
-        if (hit.collider.TryGetComponent<BodyCollider>(out BodyCollider body))
+        RaycastHit2D[] hits  = Physics2D.RaycastAll(ray.origin, ray.direction, 20f);
+        foreach (var hit in hits)
         {
-            if(body.colliderDefind != target) return;
-            character.Accept(new CalculateDamageVisitor());
-            body.TakeDamage(character.currentDamage);
+            if (hit.collider == null) return;
+            if (hit.collider.CompareTag("Player")) continue;
+            if (hit.collider.TryGetComponent<BodyCollider>(out BodyCollider body))
+            {
+                if (body.colliderDefind != target) return;
+                character.Accept(new CalculateDamageVisitor());
+                body.TakeDamage(character.currentDamage);
+                break;
+            }
+            else Debug.Log("Not found collider");
         }
-        else Debug.LogWarning("Not found Collider!");
     }    
 }
