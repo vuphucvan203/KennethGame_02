@@ -31,7 +31,6 @@ public class WeaponRaycast : KennMonoBehaviour
                 body.TakeDamage(character.currentDamage);
                 break;
             }
-            else Debug.Log("Not found collider");
         }
     }    
 }

@@ -24,18 +24,21 @@ public enum AttackType
 public abstract class EnemyAI : KennMonoBehaviour
 {
     [SerializeField] protected Enemy enemy;
+    public Enemy Enemy => enemy;
     [SerializeField] protected EnemyStateTrigger stateTrigger;
     [SerializeField] protected StateAction action;
     [SerializeField] protected AttackType attack;
     public AttackType AttackType => attack;
     [SerializeField] protected float timer, cooldown;
+    [SerializeField] protected CheckFront checkFront;
+    public CheckFront CheckFront => checkFront;
     protected Vector3 directionTarget;
-    protected Transform target;
     protected bool detected = false;
     public bool startCooldown { get; set; }
+    public LayerMask layerMask;
     public float patrolRadius = 10f;
-    public int speed = 2;
     public int rotationSpeed = 5;
+    public float attackLimit = 3f;
 
 
     protected override void Start()
@@ -57,6 +60,7 @@ public abstract class EnemyAI : KennMonoBehaviour
         base.LoadComponent();
         enemy = GetComponent<Enemy>();
         stateTrigger = GetComponent<EnemyStateTrigger>();
+        checkFront = GetComponentInChildren<CheckFront>();
     }
 
     protected virtual void MakeDecision()
@@ -66,12 +70,21 @@ public abstract class EnemyAI : KennMonoBehaviour
 
     protected void MoveExcute()
     {
-        if(detected)
+        Collider2D areaDetection = Physics2D.OverlapCircle(transform.position, patrolRadius, layerMask);
+        if (checkFront && checkFront.HasObstacle)
         {
-            FollowTarget();
+            directionTarget = GetRandomPoint();
+            MoveToNewDirection(directionTarget);
+        } 
+            
+        if (areaDetection != null)
+        {
+            detected = true;
+            FollowTarget(areaDetection.transform.position);
         }
-        else
+        else 
         {
+            detected = false;
             MoveToNewDirection(directionTarget);
             if (Vector3.Distance(transform.position, directionTarget) < 0.1f)
             {
@@ -79,7 +92,6 @@ public abstract class EnemyAI : KennMonoBehaviour
                 MoveToNewDirection(directionTarget);
             }
         } 
-            
         if (action == StateAction.Move) stateTrigger.ActiveMove();
     }
 
@@ -110,23 +122,21 @@ public abstract class EnemyAI : KennMonoBehaviour
 
     protected void MoveToNewDirection(Vector3 targetPos)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, enemy.SpeedStats.Value * Time.deltaTime);
         Vector3 direction = transform.position - targetPos;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle - 90);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    protected void FollowTarget()
+    protected void FollowTarget(Vector3 target)
     {
-        if (!detected) return;
-        float distance = Vector3.Distance(transform.position, target.position);
-        if (distance < 3f)
+        float distance = Vector3.Distance(transform.position, target);
+        if (distance < attackLimit)
         {
             action = StateAction.Attack;
-            return;
         }
-        MoveToNewDirection(target.position);
+        else MoveToNewDirection(target);
     }
 
     protected Vector3 GetRandomPoint()
@@ -135,25 +145,6 @@ public abstract class EnemyAI : KennMonoBehaviour
         Random.Range(-patrolRadius, patrolRadius),
         Random.Range(-patrolRadius, patrolRadius), 0);
         return randomPoint;
-    }
-
-    protected void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent<BodyCollider>(out BodyCollider body))
-        {
-            if (body.colliderDefind != ColliderType.SoliderBody) return;
-            detected = true;
-            target = body.transform.parent;
-        }
-    }
-
-    protected void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.TryGetComponent<BodyCollider>(out BodyCollider body))
-        {
-            if (body.colliderDefind != ColliderType.SoliderBody) return;
-            detected = false;
-        }
     }
 
 }

@@ -20,11 +20,11 @@ public class EnemySpawnerSample : SpawnerSample
 
     public Transform Spawn(Vector2 position)
     {
-        Transform newEnemy = GetFromPoolingObject(spawnObject.transform);
+        Transform newEnemy = GetFromPoolingObject(spawnObjects); 
         newEnemy.parent = holder.transform.parent;
         newEnemy.position = position;
         newEnemy.gameObject.SetActive(true);
-        newEnemy.transform.parent = holder.transform;
+        newEnemy.transform.SetParent(holder.transform);
         spawnCount++;
         EnemySpawnSystem.Instance.isSpawn = true;
         return newEnemy;

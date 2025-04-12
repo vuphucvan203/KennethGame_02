@@ -8,11 +8,10 @@ public class SpawnerSample : KennMonoBehaviour
     [SerializeField] protected Transform prefab;
     [SerializeField] protected ObjectHolderCtrl holder;
     public ObjectHolderCtrl Holder => holder;
-    [SerializeField] protected ObjectCtrl spawnObject;
+    [SerializeField] protected List<Transform> spawnObjects;
     [SerializeField] protected List<Transform> poolingObject;
     protected int spawnCount;
     protected int spawnLimit;
-    public bool isReused;
 
     protected override void LoadComponent()
     {
@@ -33,37 +32,40 @@ public class SpawnerSample : KennMonoBehaviour
         holder = transform.Find("Holder").GetComponent<ObjectHolderCtrl>();
     }
 
-    protected Transform GetFromPoolingObject(Transform spawnObj)
+    protected Transform GetFromPoolingObject(List<Transform> spawnObjects)
     {
+        int randomObject = Random.Range(0, spawnObjects.Count - 1);
+
         foreach (Transform poolObj in poolingObject)
         {
-            if(poolObj.name == spawnObj.name)
+            if(poolObj.name == spawnObjects[randomObject].name)
             {
                 poolingObject.Remove(poolObj);
                 return poolObj;
             }
         }
 
-        Transform obj = Instantiate(spawnObj);
-        obj.name = spawnObj.name;
+        Transform obj = Instantiate(spawnObjects[randomObject]);
+        obj.name = spawnObjects[randomObject].name;
         return obj;
     }
 
-    public void SetSpawnObject(ObjectCtrl objectCtrl)
+    public void SetSpawnObject(List<Transform> characters)
     {
-        spawnObject = objectCtrl;
-        ObjectCtrl newObject = Instantiate(objectCtrl);
-        newObject.gameObject.SetActive(false);
-        newObject.name = objectCtrl.EnemyType.ToString();
-        newObject.transform.parent = prefab.transform;
+        spawnObjects = characters;
+        //foreach (Transform transform in characters)
+        //{
+        //    Transform newObject = Instantiate(transform);
+        //    newObject.gameObject.SetActive(false);
+        //    newObject.name = transform.transform.name;
+        //    newObject.SetParent(prefab.transform);
+        //}    
     }
 
     public void DespawnObject(Transform obj)
     {
         poolingObject.Add(obj);
         obj.gameObject.SetActive(false);
-        ObjectCtrl objCtrl = obj.GetComponent<ObjectCtrl>();
-        objCtrl.isDeath = false;
         holder.LoadActiveObject();
     }
 }

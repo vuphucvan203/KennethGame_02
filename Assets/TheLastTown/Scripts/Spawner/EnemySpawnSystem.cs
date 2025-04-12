@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class EnemySpawnSystem : SpawnSystem
     private static EnemySpawnSystem instance;
     public static EnemySpawnSystem Instance => instance;
     [SerializeField] protected EnemySpawnerSample[] spawnerSamples;
+    protected List<Transform> enemySameType = new List<Transform>();
 
 
     private void Awake()
@@ -64,18 +66,18 @@ public class EnemySpawnSystem : SpawnSystem
         newSpawner.Spawn(positions);
     }
 
-    protected EnemySpawnerSample CreateSpawner(EnemyType enemyType)
+    protected EnemySpawnerSample CreateSpawner(EnemyType type)
     {
         EnemySpawnerSample enemySpawner = null;
-
-        foreach (ObjectCtrl enemyCtrl in prefabs)
+        int length = prefabs.Length;
+        for (int i = 0; i < length; i++)
         {
-            if (enemyCtrl.EnemyType == enemyType)
+            Enemy enemy = prefabs[i].GetComponent<Enemy>();
+            if (i == length - 1)
             {
-                enemySpawner = GetSpawnerFromHolder(enemyType);
-                enemySpawner.SetSpawnObject(enemyCtrl);
-
-                switch (enemyType)
+                enemySpawner = GetSpawnerFromHolder(type);
+                enemySpawner.SetSpawnObject(enemySameType);
+                switch (type)
                 {
                     case EnemyType.MindlessZombie:
                         enemySpawner.EnemyType = EnemyType.MindlessZombie;
@@ -83,9 +85,25 @@ public class EnemySpawnSystem : SpawnSystem
                     case EnemyType.CopZombie:
                         enemySpawner.EnemyType = EnemyType.CopZombie;
                         break;
+                    case EnemyType.ArmyZombie:
+                        enemySpawner.EnemyType = EnemyType.ArmyZombie;
+                        break;
+                    case EnemyType.AcidSpitter:
+                        enemySpawner.EnemyType = EnemyType.AcidSpitter;
+                        break;
+                    case EnemyType.FleshThrower:
+                        enemySpawner.EnemyType = EnemyType.FleshThrower;
+                        break;
+                    case EnemyType.AlphaBeast:
+                        enemySpawner.EnemyType = EnemyType.AlphaBeast;
+                        break;
                 }
-                enemySpawner.name = enemyCtrl.name + "Spawner";
+                enemySpawner.name = type.ToString() + "Spawner";
                 enemySpawner.transform.parent = holder.transform;
+            }
+            if (enemy.EnemyType == type)
+            {
+                enemySameType.Add(prefabs[i]);
             }
         }
         return enemySpawner;

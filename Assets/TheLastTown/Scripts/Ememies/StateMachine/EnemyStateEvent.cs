@@ -33,4 +33,9 @@ public abstract class EnemyStateEvent : KennMonoBehaviour
     {
         enemyAI.startCooldown = true;
     }    
+
+    public void DeathHandle()
+    {
+        enemyAI.Enemy.Spawner.DespawnObject(transform.parent);
+    }    
 }

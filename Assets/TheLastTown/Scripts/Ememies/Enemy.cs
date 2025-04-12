@@ -6,22 +6,27 @@ public enum EnemyType
 {
     MindlessZombie,
     CopZombie,
-    WarriorZombie,
+    ArmyZombie,
     AcidSpitter,
     FleshThrower,
-    AlphaMonstrosity
+    AlphaBeast
 }
 
 public abstract class Enemy : Character
 {
+    [SerializeField] protected EnemyType type;
+    public EnemyType EnemyType => type;
     [SerializeField] protected EnemyAI enemyAI;
     public EnemyAI EnemyAI => enemyAI;
+    [SerializeField] protected SpawnerSample spawner;
+    public SpawnerSample Spawner => spawner;
     [SerializeField] protected EnemyStateMachine stateMachine;
     public EnemyStateMachine StateMachine => stateMachine;
     [SerializeField] protected EnemyStateTrigger stateTrigger;
     public EnemyStateTrigger StateTrigger => stateTrigger;
     [SerializeField] protected IEnemyAttackStrategy attackStrategy;
     public AttackType currentAttack;
+    public HealthBarType healthBarType;
 
     protected Enemy(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
@@ -30,17 +35,26 @@ public abstract class Enemy : Character
 
     public IEnemyAttackStrategy AttackStrategy => attackStrategy;
 
+    protected void Update()
+    {
+        if (healthStats.Value == 0)
+        {
+            stateMachine.SwitchState(new EnemyDeathState(stateMachine));
+        }  
+    }
+
     protected override void LoadComponent()
     {
         base.LoadComponent();
         enemyAI = GetComponent<EnemyAI>();
+        spawner = GetComponentInParent<SpawnerSample>();
         stateMachine = GetComponent<EnemyStateMachine>();
         stateTrigger = GetComponent<EnemyStateTrigger>();
     }
 
     public void SetStrategy(AttackType type)
     {
-        switch(type)
+        switch (type)
         {
             case AttackType.Melee:
                 attackStrategy = new MeleeAttack();
@@ -64,5 +78,5 @@ public abstract class Enemy : Character
                 attackStrategy = new TwinTalonsAttack();
                 break;
         }
-    }    
+    }
 }

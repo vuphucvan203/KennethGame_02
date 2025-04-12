@@ -6,7 +6,7 @@ public abstract class SpawnSystem : KennMonoBehaviour
 {
     [SerializeField] protected List<Transform> poolingSpawner;
     [SerializeField] protected SpawnerHolderCtrl holder;
-    [SerializeField] protected ObjectCtrl[] prefabs;
+    [SerializeField] protected Transform[] prefabs;
     public bool isSpawn;
     
 
@@ -24,7 +24,7 @@ public abstract class SpawnSystem : KennMonoBehaviour
 
     protected virtual void LoadPrefabs(string nameFile)
     {
-        prefabs = Resources.LoadAll<ObjectCtrl>("Prefabs/" + nameFile);
+        prefabs = Resources.LoadAll<Transform>("Prefabs/" + nameFile);
     }
 
     protected void PutSpawnerToPooling(Transform spawner)

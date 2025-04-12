@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectHolderCtrl : KennMonoBehaviour
 {
-    public List<ObjectCtrl> holdObject;
+    public List<Transform> holdObject;
     [SerializeField] protected int activeObjectAmount;
 
     public void LoadActiveObject()
@@ -28,7 +28,7 @@ public class ObjectHolderCtrl : KennMonoBehaviour
     {
         for (int i = holdObject.Count; i < transform.childCount; i++)
         {
-            holdObject.Add(transform.GetChild(i).GetComponent<ObjectCtrl>());
+            holdObject.Add(transform.GetChild(i).GetComponent<Transform>());
         }
         LoadActiveObject();
     }

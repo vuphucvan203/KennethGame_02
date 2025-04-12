@@ -8,6 +8,7 @@ public class BodyCollider : KennMonoBehaviour
 {
     [SerializeField] protected Character character;
     public ColliderType colliderDefind;
+    public bool hasTakedDamage = false;
 
 
     protected override void LoadComponent()
@@ -20,5 +21,14 @@ public class BodyCollider : KennMonoBehaviour
     {
         int damageReduce = damage - character.ApplyDefenseStats(damage);
         character.Health.DecreaseStats(damageReduce);
+        if(colliderDefind == ColliderType.EnemyBody)
+        {
+            if (!hasTakedDamage)
+            {
+                hasTakedDamage = true;
+                Enemy enemy = (Enemy)character;
+                HealthBarSpawnSystem.Instance.SpawnHealthBar(enemy.healthBarType, enemy);
+            } 
+        } 
     }
 }

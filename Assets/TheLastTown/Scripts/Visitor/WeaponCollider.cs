@@ -20,12 +20,11 @@ public class WeaponCollider : KennMonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent<BodyCollider>(out BodyCollider body))
+        if(other.TryGetComponent<BodyCollider>(out BodyCollider body))
         {
             if (body.colliderDefind != colliderTarget) return;
             character.Accept(new CalculateDamageVisitor());
             body.TakeDamage(character.currentDamage);
         }
-        else Debug.LogWarning("Not found Collider!");
     }
 }
