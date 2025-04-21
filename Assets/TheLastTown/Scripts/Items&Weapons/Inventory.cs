@@ -19,6 +19,7 @@ public class  Category
 
 public class Inventory : KennMonoBehaviour
 {
+    [SerializeField] protected Soldier soldier;
     [SerializeField] protected List<Category> itemForUse;
     [SerializeField] protected List<Weapon> weaponOwner;
     [SerializeField] protected LayerMask layerMask;
@@ -28,12 +29,17 @@ public class Inventory : KennMonoBehaviour
         InventoryActive();
     }
 
+    protected override void LoadComponent()
+    {
+        base.LoadComponent();
+        soldier = GetComponent<Soldier>();
+    }
+
     protected void InventoryActive()
     {
         Collider2D rangePickupable = Physics2D.OverlapCircle(transform.position, 3f, layerMask);
         if(rangePickupable != null)
         {
-            Debug.Log(rangePickupable.name);
             if(rangePickupable.TryGetComponent<Item>(out Item item)) AddItem(item, 1);
             if (rangePickupable.TryGetComponent<Weapon>(out Weapon weapon)) AddWeapon(weapon, 1);
         } 
@@ -41,8 +47,10 @@ public class Inventory : KennMonoBehaviour
 
     public void AddItem(Item item, int amount)
     {
+        if (!item.isPickupable) return;
         Category category = new Category(item, amount);
         itemForUse.Add(category);
+        item.UseItem(soldier);
         item.transform.gameObject.SetActive(false);
     }   
     

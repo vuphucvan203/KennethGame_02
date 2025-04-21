@@ -16,6 +16,8 @@ public abstract class Enemy : Character
 {
     [SerializeField] protected EnemyType type;
     public EnemyType EnemyType => type;
+    [SerializeField] protected int price;
+    public int Price => price;
     [SerializeField] protected EnemyAI enemyAI;
     public EnemyAI EnemyAI => enemyAI;
     [SerializeField] protected SpawnerSample spawner;
@@ -27,6 +29,7 @@ public abstract class Enemy : Character
     [SerializeField] protected IEnemyAttackStrategy attackStrategy;
     public AttackType currentAttack;
     public HealthBarType healthBarType;
+    public bool isDeath = false;
 
     protected Enemy(string name, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
@@ -37,10 +40,7 @@ public abstract class Enemy : Character
 
     protected void Update()
     {
-        if (healthStats.Value == 0)
-        {
-            stateMachine.SwitchState(new EnemyDeathState(stateMachine));
-        }  
+        if (!isDeath && healthStats.value == 0) HandleDie();
     }
 
     protected override void LoadComponent()
@@ -50,6 +50,16 @@ public abstract class Enemy : Character
         spawner = GetComponentInParent<SpawnerSample>();
         stateMachine = GetComponent<EnemyStateMachine>();
         stateTrigger = GetComponent<EnemyStateTrigger>();
+    }
+
+    protected override void LoadBaseStats(CharacterType character)
+    {
+        EnemyData data = DataSystem.LoadEnemyData("/" + character.ToString() + "Data.json");
+        healthStats = new BaseStats("Health", data.health, data.health);
+        attackStats = new BaseStats("Attack", data.attack, 100);
+        defenseStats = new BaseStats("Defense", data.defense, 100);
+        speedStats = new BaseStats("Speed", data.speed, 8);
+        price = data.price;
     }
 
     public void SetStrategy(AttackType type)
@@ -78,5 +88,12 @@ public abstract class Enemy : Character
                 attackStrategy = new TwinTalonsAttack();
                 break;
         }
+    }
+
+    protected void HandleDie()
+    {
+        isDeath = true;
+        transform.rotation = Quaternion.identity;
+        stateMachine.SwitchState(new EnemyDeathState(stateMachine));
     }
 }

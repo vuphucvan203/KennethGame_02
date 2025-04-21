@@ -64,10 +64,12 @@ MonoBehaviour:
     value: 0
   type: 5
   enemyAI: {fileID: 7311849667017754624}
+  spawner: {fileID: 0}
   stateMachine: {fileID: 6180985949553563466}
   stateTrigger: {fileID: 8574327338029366369}
   currentAttack: 0
   healthBarType: 5
+  isDeath: 0
 --- !u!114 &6180985949553563466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,8 +116,6 @@ MonoBehaviour:
   stateTrigger: {fileID: 8574327338029366369}
   action: 0
   attack: 0
-  timer: 0
-  cooldown: 1
   checkFront: {fileID: 0}
   layerMask:
     serializedVersion: 2
@@ -748,6 +748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 6712501347500283287}
   colliderDefind: 2
+  hasTakedDamage: 0
 --- !u!1 &8070298939953308232
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +760,7 @@ GameObject:
   - component: {fileID: 5975683636602206949}
   - component: {fileID: 2640222144565359715}
   - component: {fileID: 135717405765215222}
-  - component: {fileID: 5493055871784189379}
+  - component: {fileID: 8990571411407738879}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -861,7 +862,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5493055871784189379
+--- !u!114 &8990571411407738879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

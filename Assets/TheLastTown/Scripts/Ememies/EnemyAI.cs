@@ -29,8 +29,8 @@ public abstract class EnemyAI : KennMonoBehaviour
     [SerializeField] protected StateAction action;
     [SerializeField] protected AttackType attack;
     public AttackType AttackType => attack;
-    [SerializeField] protected float timer, cooldown;
     [SerializeField] protected CheckFront checkFront;
+    protected float timer, cooldown; 
     public CheckFront CheckFront => checkFront;
     protected Vector3 directionTarget;
     protected bool detected = false;
@@ -50,6 +50,7 @@ public abstract class EnemyAI : KennMonoBehaviour
 
     private void Update()
     {
+        if (Enemy.isDeath) return;
         MakeDecision();
         MoveExcute();
         AttackExcute();
@@ -113,16 +114,21 @@ public abstract class EnemyAI : KennMonoBehaviour
             timer += Time.deltaTime;
             if (timer > cooldown)
             {
-                action = StateAction.Attack;
+                HandleAttackStrategy();
                 startCooldown = false;
                 timer = 0;
             }
         }
     }
 
+    protected virtual void HandleAttackStrategy()
+    {
+        action = StateAction.Attack;
+    }    
+
     protected void MoveToNewDirection(Vector3 targetPos)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, enemy.SpeedStats.Value * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, enemy.SpeedStats.value * Time.deltaTime);
         Vector3 direction = transform.position - targetPos;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion targetRotation = Quaternion.Euler(0, 0, angle - 90);

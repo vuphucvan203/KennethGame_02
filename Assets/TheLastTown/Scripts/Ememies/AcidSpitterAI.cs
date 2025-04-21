@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,4 +11,18 @@ public class AcidSpitterAI : EnemyAI
     {
         base.MakeDecision();
     }
+
+    protected override void HandleAttackStrategy()
+    {
+        GetRandomAttack();
+        base.HandleAttackStrategy();
+    }
+
+    protected void GetRandomAttack()
+    {
+        int strategyIndex = Random.Range(0, 98);
+        if (strategyIndex <= 32) attack = AttackType.Melee;
+        else if (strategyIndex >= 33 && strategyIndex <= 65) attack = AttackType.SmallAcid;
+        else attack = AttackType.BigAcid;
+    }    
 }

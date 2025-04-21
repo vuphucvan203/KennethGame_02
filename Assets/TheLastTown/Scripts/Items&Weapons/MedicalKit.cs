@@ -6,8 +6,8 @@ public class MedicalKit : Item
 {
     [SerializeField] protected int healthAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
-        player.controller.Soldier.Health.IncreaseStats(healthAmount);
+        soldier.Health.IncreaseStats(healthAmount);
     }
 }

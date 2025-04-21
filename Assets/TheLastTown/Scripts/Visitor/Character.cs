@@ -31,14 +31,7 @@ public abstract class Character : KennMonoBehaviour
         speedStats = speed;
     }
 
-    protected void LoadBaseStats(CharacterType character)
-    {
-        CharacterData data = DataSystem.LoadSoldierData("/" + character.ToString() + "Data.json");
-        healthStats = new BaseStats("Health", data.health, data.health);
-        attackStats = new BaseStats("Attack", data.attack, 100);
-        defenseStats = new BaseStats("Defense", data.defense, 100);
-        speedStats = new BaseStats("Speed", data.speed, 8);
-    }
+    protected abstract void LoadBaseStats(CharacterType character);
 
     public int ApplyAttackStats(int damage)
     {

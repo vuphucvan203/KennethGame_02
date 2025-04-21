@@ -6,8 +6,8 @@ public class Armor : Item
 {
     [SerializeField] protected int defenseAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
-        player.controller.Soldier.DefenseStats.IncreaseStats(defenseAmount);
+        soldier.DefenseStats.IncreaseStats(defenseAmount);
     }
 }

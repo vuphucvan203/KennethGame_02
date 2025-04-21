@@ -6,8 +6,8 @@ public class SpeedUp : Item
 {
     [SerializeField] protected int upAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
-        player.controller.Soldier.SpeedStats.IncreaseStats(upAmount);
+        soldier.SpeedStats.IncreaseStats(upAmount);
     }
 }

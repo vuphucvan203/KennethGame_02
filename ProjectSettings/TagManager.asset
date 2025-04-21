@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Trigger
+  - Explosion
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - UI
   - Solider
   - Pickupable
-  - 
+  - Map
   - 
   - 
   - 

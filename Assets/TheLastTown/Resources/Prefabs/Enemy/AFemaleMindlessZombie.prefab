@@ -156,12 +156,14 @@ MonoBehaviour:
     maxValue: 0
     value: 0
   type: 0
+  price: 5
   enemyAI: {fileID: 1787666648104302635}
   spawner: {fileID: 0}
   stateMachine: {fileID: 5967535719721574117}
   stateTrigger: {fileID: 8615558584466029558}
   currentAttack: 0
   healthBarType: 1
+  isDeath: 0
 --- !u!114 &5967535719721574117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,8 +211,6 @@ MonoBehaviour:
   stateTrigger: {fileID: 8615558584466029558}
   action: 0
   attack: 0
-  timer: 0
-  cooldown: 0
   checkFront: {fileID: 0}
   layerMask:
     serializedVersion: 2
@@ -603,3 +603,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   character: {fileID: 4319532533229182935}
   colliderDefind: 2
+  hasTakedDamage: 0

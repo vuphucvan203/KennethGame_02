@@ -8,8 +8,7 @@ public class BaseStats
 {
     protected string statsName;
     [SerializeField] protected int maxValue;
-    [SerializeField] protected int value;
-    public int Value => value;
+    public int value;
 
     public BaseStats(string name, int value, int maxValue)
     {
@@ -31,4 +30,8 @@ public class BaseStats
     }
 
     public float Percent => (float) value / maxValue;
+
+    public int Remaining => Mathf.Abs(maxValue - value);
+
+    public bool overValue => value >= maxValue;
 }
