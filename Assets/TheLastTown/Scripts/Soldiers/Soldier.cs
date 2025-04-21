@@ -10,6 +10,8 @@ public enum SoldierType
 
 public abstract class Soldier : Character
 {
+    [SerializeField] protected int money;
+    public int Money { get =>  money; set => money = value; }
     [SerializeField] protected Controller controller;
     public Controller Controller => controller;
     [SerializeField] protected SoldierStateTrigger stateTrigger;
@@ -19,8 +21,14 @@ public abstract class Soldier : Character
     [SerializeField] protected Rigidbody2D rig;
     public Rigidbody2D Rig => rig;
     public Inventory inventory;
-    protected BaseStats level;
-    protected BaseStats experience;
+    [SerializeField] protected BaseStats level;
+    public BaseStats Level { get => level; set => level = value; }
+    [SerializeField] protected BaseStats experience;
+    public BaseStats Experience { get => experience; set => experience = value; }
+    [SerializeField] protected Upgrade upgrade;
+    public Upgrade Upgrade => upgrade;
+    [SerializeField] protected Skills skills;
+    public Skills Skills => skills;
     protected IIdleStrategy idleStrategy;
     public IIdleStrategy IdleStrategy => idleStrategy;
     protected IMoveStrategy moveStrategy;
@@ -40,10 +48,23 @@ public abstract class Soldier : Character
     {
         base.LoadComponent();
         inventory = GetComponent<Inventory>();
+        upgrade = GetComponent<Upgrade>();
+        skills = GetComponent<Skills>();
         stateTrigger = GetComponent<SoldierStateTrigger>();
         stateMachine = GetComponent<SoldierStateMachine>();
         rig = GetComponent<Rigidbody2D>();
-    }  
+    }
+
+    protected override void LoadBaseStats(CharacterType character)
+    {
+        SoldierData data = DataSystem.LoadSoldierData("/" + character.ToString() + "Data.json");
+        healthStats = new BaseStats("Health", data.health, data.health);
+        attackStats = new BaseStats("Attack", data.attack, 100);
+        defenseStats = new BaseStats("Defense", data.defense, 100);
+        speedStats = new BaseStats("Speed", data.speed, 8);
+        level = new BaseStats("Level", data.level, 100);
+        experience = new BaseStats("Experience", data.experience, 100);
+    }
 
     public void SetStategy(WeaponType weapon)
     {

@@ -7,8 +7,8 @@ public class SuperPower : Item
 {
     [SerializeField] protected int attackAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
-        player.controller.Soldier.AttackStats.IncreaseStats(attackAmount);
+        soldier.AttackStats.IncreaseStats(attackAmount);
     }
 }

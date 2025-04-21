@@ -34,19 +34,19 @@ public class SpawnerSample : KennMonoBehaviour
 
     protected Transform GetFromPoolingObject(List<Transform> spawnObjects)
     {
-        int randomObject = Random.Range(0, spawnObjects.Count - 1);
+        int index = Random.Range(0, spawnObjects.Count - 1);
 
         foreach (Transform poolObj in poolingObject)
         {
-            if(poolObj.name == spawnObjects[randomObject].name)
+            if(poolObj.name == spawnObjects[index].name)
             {
                 poolingObject.Remove(poolObj);
                 return poolObj;
             }
         }
 
-        Transform obj = Instantiate(spawnObjects[randomObject]);
-        obj.name = spawnObjects[randomObject].name;
+        Transform obj = Instantiate(spawnObjects[index]);
+        obj.name = spawnObjects[index].name;
         return obj;
     }
 

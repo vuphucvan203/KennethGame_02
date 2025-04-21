@@ -21,8 +21,10 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
     private Dictionary<string, Tilemap> tilemapsByName = new();
     private Dictionary<string, Dictionary<Vector2Int, TileBase[,]>> allChunkData = new();
     private Dictionary<string, HashSet<Vector2Int>> loadedChunksPerLayer = new();
-    private Queue<(string layerName, Vector2Int coord)> chunkLoadQueue = new();
+    //private Queue<(string layerName, Vector2Int coord)> chunkLoadQueue = new();
+    private Queue<Vector2Int> chunkCoordQueue = new();
     private bool isLoadingChunks = false;
+    private HashSet<Vector2Int> queuedChunk = new();
 
 #if UNITY_EDITOR
     [ContextMenu("Load All Base Tile From Assets")]
@@ -180,9 +182,9 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
         gridRoot = transform;
     }
 
-    Vector2Int GetPlayerChunkCoord(Tilemap tilemap)
+    Vector2Int GetPlayerChunkCoord()
     {
-        Vector3Int playerCell = tilemap.WorldToCell(player.position);
+        Vector3Int playerCell = tilemapsByName.Values.First().WorldToCell(player.position);
         return new Vector2Int(
             Mathf.FloorToInt(playerCell.x / chunkSize),
             Mathf.FloorToInt(playerCell.y / chunkSize)
@@ -191,9 +193,10 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
 
     void LoadChunkAround()
     {
-        //HashSet<Vector2Int> shouldExist = new();
         if (tilemapsByName.Count == 0)
             tilemapsByName = gridRoot.GetComponentsInChildren<Tilemap>().ToDictionary(t => t.gameObject.name, t => t);
+
+        Vector2Int playerChunk = GetPlayerChunkCoord();
 
         foreach (var layer in allChunkData.Keys)
         {
@@ -201,16 +204,22 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
             var chunkDict = allChunkData[layer];
             var loadedSet = loadedChunksPerLayer.ContainsKey(layer) ? loadedChunksPerLayer[layer] : (loadedChunksPerLayer[layer] = new());
 
-            Vector2Int playerChunk = GetPlayerChunkCoord(tilemap);
             for (int x = -loadRadius; x <= loadRadius; x++)
             {
                 for (int y = -loadRadius; y <= loadRadius; y++)
                 {
                     Vector2Int coord = playerChunk + new Vector2Int(x, y);
-                    //shouldExist.Add(coord);
+                    if (!queuedChunk.Contains(coord))
+                    {
+                        chunkCoordQueue.Enqueue(coord);
+                        queuedChunk.Add(coord);
+                    }
+
+                    if (!loadedChunksPerLayer.ContainsKey(layer))
+                        loadedChunksPerLayer[layer] = new();
+
                     if (!loadedSet.Contains(coord))
                     {
-                        chunkLoadQueue.Enqueue((layer, coord));
                         loadedSet.Add(coord);
                     }
                 }
@@ -219,47 +228,34 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
             var toUnload = new List<Vector2Int>();
             foreach (var coord in loadedSet)
             {
-                //if (!shouldExist.Contains(coord))
                 if (Mathf.Abs(coord.x - playerChunk.x) > existRadius || Mathf.Abs(coord.y - playerChunk.y) > existRadius)
                 {
                     UnloadChunk(tilemap, chunkDict, coord);
                     toUnload.Add(coord);
+                    queuedChunk.Remove(coord);
                 }
             }
             foreach (var c in toUnload) loadedSet.Remove(c);
         }
 
-        if (!isLoadingChunks && chunkLoadQueue.Count > 0)
+        if (!isLoadingChunks && chunkCoordQueue.Count > 0)
             StartCoroutine(LoadChunksGradully());
     }
-
-    //void PreviewAllChunks()
-    //{
-    //    foreach (var layer in allChunkData.Keys)
-    //    {
-    //        var tilemap = tilemapsByName[layer];
-    //        var chunkDict = allChunkData[layer];
-
-    //        foreach (var coord in chunkDict.Keys)
-    //        {
-    //            LoadChunk(tilemap, chunkDict, coord);
-    //        }
-
-    //        Debug.Log($" Preview all chunks: {layer}");
-    //    }
-    //}
 
     IEnumerator LoadChunksGradully()
     {
         isLoadingChunks = true;
-        while (chunkLoadQueue.Count > 0)
+        while (chunkCoordQueue.Count > 0)
         {
-            var (layer, coord) = chunkLoadQueue.Dequeue();
-            var tilemap = tilemapsByName[layer];
-            var chunkDict = allChunkData[layer];
+            var coord = chunkCoordQueue.Dequeue();
+            foreach (var layer in allChunkData.Keys)
+            {
+                var tilemap = tilemapsByName[layer];
+                var chunkDict = allChunkData[layer];
 
-            LoadChunk(tilemap, chunkDict, coord);
-            loadedChunksPerLayer[layer].Add(coord);
+                LoadChunk(tilemap, chunkDict, coord);
+                loadedChunksPerLayer[layer].Add(coord);
+            }    
 
             yield return null;
         }    

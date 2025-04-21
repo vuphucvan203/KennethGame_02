@@ -6,7 +6,7 @@ public class Magazine : Item
 {
     [SerializeField] protected int ammoAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
 
     }

@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class SpawnTrigger : KennMonoBehaviour
+public abstract class SpawnTrigger : KennMonoBehaviour
 {
     [SerializeField] protected Collider2D coll;
     [SerializeField] protected SpawnRange spawnRange;
     [SerializeField] protected int spawnAmount;
-    [SerializeField] protected EnemyType type;
 
 
     protected override void LoadComponent()
@@ -15,10 +14,7 @@ public class SpawnTrigger : KennMonoBehaviour
         spawnRange = GetComponentInChildren<SpawnRange>();  
     }
 
-    protected void ActiveSpawner()
-    {
-        EnemySpawnSystem.Instance.SpawnEnemies(type, spawnAmount, spawnRange.GetRandomSpawnPosition(spawnAmount));
-    }
+    protected abstract void ActiveSpawner();
 
     protected void OnTriggerEnter2D(Collider2D other)
     {

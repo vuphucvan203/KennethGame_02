@@ -70,13 +70,14 @@ public class EnemySpawnSystem : SpawnSystem
     {
         EnemySpawnerSample enemySpawner = null;
         int length = prefabs.Length;
+        List<Transform> spawnObjects = new List<Transform>();
         for (int i = 0; i < length; i++)
         {
             Enemy enemy = prefabs[i].GetComponent<Enemy>();
             if (i == length - 1)
             {
                 enemySpawner = GetSpawnerFromHolder(type);
-                enemySpawner.SetSpawnObject(enemySameType);
+                enemySpawner.SetSpawnObject(spawnObjects);
                 switch (type)
                 {
                     case EnemyType.MindlessZombie:
@@ -103,7 +104,7 @@ public class EnemySpawnSystem : SpawnSystem
             }
             if (enemy.EnemyType == type)
             {
-                enemySameType.Add(prefabs[i]);
+                spawnObjects.Add(prefabs[i]);
             }
         }
         return enemySpawner;

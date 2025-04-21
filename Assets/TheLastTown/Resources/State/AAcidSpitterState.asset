@@ -24,5 +24,5 @@ MonoBehaviour:
   - name: AAS_BigAcidAttack
     duringTime: 0.2
   Death:
-  - name: AAC_Death
+  - name: AAS_Death
     duringTime: 0.2

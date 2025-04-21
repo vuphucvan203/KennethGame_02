@@ -6,7 +6,7 @@ public class FuelCanister : Item
 {
     [SerializeField] protected float fuelAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
         
     }

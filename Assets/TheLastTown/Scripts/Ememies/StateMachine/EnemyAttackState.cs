@@ -21,7 +21,10 @@ public class EnemyAttackState : EnemyBaseState, IState
 
     public void Excute()
     {
-        
+        if (stateMachine.Enemy.currentAttack != attackType)
+        {
+            stateMachine.SwitchState(new EnemyAttackState(stateMachine.Enemy.currentAttack, stateMachine));
+        }    
     }
 
     public void Exit()

@@ -42,6 +42,7 @@ public class CharacterEditor : Editor
                 dataSystem.enemydata.attack = EditorGUILayout.IntField("Attack", dataSystem.enemydata.attack);
                 dataSystem.enemydata.defense = EditorGUILayout.IntField("Defense", dataSystem.enemydata.defense);
                 dataSystem.enemydata.speed = EditorGUILayout.IntField("Speed", dataSystem.enemydata.speed);
+                dataSystem.enemydata.price = EditorGUILayout.IntField("Price", dataSystem.enemydata.price);
                 if (GUILayout.Button("Save")) SaveFile(dataSystem.enemydata);
                 if (GUILayout.Button("Load")) LoadEnemyData(dataSystem);
                 break;

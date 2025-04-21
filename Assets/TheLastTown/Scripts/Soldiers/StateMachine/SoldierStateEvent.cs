@@ -40,6 +40,7 @@ public class SoldierStateEvent : MonoBehaviour
     public void EnableKnife()
     {
         colliders[0].gameObject.SetActive(true);
+        SoundManager.Instance.PlaySFXEffect(SFXEffectType.KnifeCut);
     }
 
     public void DisableKnife()
@@ -50,6 +51,7 @@ public class SoldierStateEvent : MonoBehaviour
     public void EnableBat()
     {
         colliders[1].gameObject.SetActive(true);
+        SoundManager.Instance.PlaySFXEffect(SFXEffectType.BatHit);
     }
 
     public void DisableBat()
@@ -60,6 +62,7 @@ public class SoldierStateEvent : MonoBehaviour
     public void EnableFlamethrower()
     {
         colliders[2].gameObject.SetActive(true);
+        SoundManager.Instance.PlaySFXEffect(SFXEffectType.Flame);
     }
 
     public void DisableFlamethrower()
@@ -70,6 +73,7 @@ public class SoldierStateEvent : MonoBehaviour
     public void EnableGun()
     {
         raycasts[0].gameObject.SetActive(true);
+        SoundManager.Instance.PlaySFXEffect(SFXEffectType.GunShot);
         raycasts[0].RaycastActive();
     }
 
@@ -82,6 +86,7 @@ public class SoldierStateEvent : MonoBehaviour
     {
         WeaponRaycast raycast = raycasts[1];
         raycast.gameObject.SetActive(true);
+        SoundManager.Instance.PlaySFXEffect(SFXEffectType.RiffleShot);
         for (int i = 0; i < raycast.amount; i++)
             raycasts[1].RaycastActive();
     }

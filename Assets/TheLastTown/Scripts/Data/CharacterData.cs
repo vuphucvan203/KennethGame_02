@@ -52,9 +52,11 @@ public class SoldierData : CharacterData
 [Serializable]
 public class EnemyData : CharacterData
 {
-    public EnemyData(CharacterType type, string name, int health, int attack, int defense, int speed) : base(type, name, health, attack, defense, speed)
-    {
+    public int price;
 
+    public EnemyData(CharacterType type, string name, int health, int attack, int defense, int speed, int price) : base(type, name, health, attack, defense, speed)
+    {
+        this.price = price;
     }
 }
 

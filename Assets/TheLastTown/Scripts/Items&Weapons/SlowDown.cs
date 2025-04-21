@@ -6,7 +6,7 @@ public class SlowDown : Item
 {
     [SerializeField] protected int downAmount;
 
-    public override void UseItem(Player player)
+    public override void UseItem(Soldier soldier)
     {
         
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class SpawnRange : KennMonoBehaviour
     [SerializeField] protected CircleCollider2D range;
     [SerializeField] protected List<Vector2> spawnPositions;
     public float minDistance = 5f;
+    public float minRadiusValid = 1f;
+    public LayerMask layerMask;
 
     protected override void LoadComponent()
     {
@@ -22,12 +25,11 @@ public class SpawnRange : KennMonoBehaviour
 
     public List<Vector2> GetRandomSpawnPosition(int amount)
     {
-        int count = 0;
         int attempts = 0;
-        int maxAttempts = 100;
+        int maxAttempts = amount * 10;
 
         
-        while (count < amount)
+        while (spawnPositions.Count < amount)
         {
             attempts++;
             float angle = Random.Range(0f, Mathf.PI * 2);
@@ -36,20 +38,11 @@ public class SpawnRange : KennMonoBehaviour
             float y = transform.position.y + distance * Mathf.Sin(angle);
             Vector2 newPos = new Vector2(x, y);
 
-            bool isValid = true;
-            foreach(var pos in spawnPositions)
-            {
-                if(Mathf.Abs(Vector2.Distance(pos, newPos)) < minDistance)
-                {
-                    isValid = false;
-                    break;
-                }
-            }
-            if (isValid)
-            {
-                spawnPositions.Add(newPos);
-                count++;
-            }
+            if (spawnPositions.Any(p => Vector2.Distance(p, newPos) < minDistance)) continue;
+
+            if (Physics2D.OverlapCircle(newPos, minRadiusValid, layerMask)) continue;
+
+            spawnPositions.Add(newPos);
 
             if (attempts >= maxAttempts)
             {
