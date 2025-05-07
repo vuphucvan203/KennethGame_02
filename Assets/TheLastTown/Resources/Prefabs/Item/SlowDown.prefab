@@ -46,8 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe1d7b5eb1cd1740908a9de40d4083e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: bcc25ffc7541eea4f8209bdd7c92b06e, type: 3}
   type: 6
   price: 0
+  isPickupable: 0
+  startDelay: 0
+  timer: 0
   downAmount: 0
 --- !u!61 &7231890214060291605
 BoxCollider2D:

@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2941602524136887073
 Transform:
   m_ObjectHideFlags: 0
@@ -46,8 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72a4028ee00f5d04cbc227e09a82fd55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: 6c98df1eafd459b44a77330a70d93e77, type: 3}
   type: 3
-  price: 0
+  price: 600
+  isPickupable: 1
+  startDelay: 0
+  timer: 0
   ammoAmount: 0
 --- !u!61 &6609372784812667087
 BoxCollider2D:

@@ -6,9 +6,16 @@ using UnityEngine;
 public class BulletGun : Weapon
 {
     [SerializeField] protected int ammo;
+    public int Ammo => ammo;
     [SerializeField] protected int magazineSize;
     [SerializeField] protected int fireRate;
     [SerializeField] protected int ammoPerShot;
+
+    protected override void Start()
+    {
+        base.Start();
+        ammo = magazineSize;
+    }
 
     public override void EquipWeapon(Player player)
     {
@@ -29,4 +36,7 @@ public class BulletGun : Weapon
         }
         else Debug.Log("Ammo is empty!");
     }
+
+    public bool IsEmpty => ammo <= 0;
+   
 }

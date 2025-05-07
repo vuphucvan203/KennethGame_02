@@ -8,6 +8,13 @@ public class FuelCanister : Item
 
     public override void UseItem(Soldier soldier)
     {
-        
+        soldier.inventory.WeaponOwner.ForEach(w =>
+        {
+            if (w.Type == WeaponType.Flamethrower)
+            {
+                Flamethrower flamethrower = w as Flamethrower;
+                flamethrower.RefillFuel();
+            }
+        });
     }
 }

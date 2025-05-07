@@ -101,7 +101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1277122288835494058
 Transform:
   m_ObjectHideFlags: 0
@@ -130,8 +130,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98792dbab0540684a869aad0a15bd4ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 21300000, guid: c01ab139a1aa6de4e9e8a0d502cf2988, type: 3}
   type: 4
-  price: 0
+  price: 900
+  isPickupable: 1
+  startDelay: 0
+  timer: 0
   fuelAmount: 0
 --- !u!61 &6578500389540970665
 BoxCollider2D:

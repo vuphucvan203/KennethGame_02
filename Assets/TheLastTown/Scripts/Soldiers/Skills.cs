@@ -14,6 +14,7 @@ public enum SkillType
 
 public class Skills : KennMonoBehaviour
 {
+    public int skillPointTotal;
     public Skill reactiveArmor;
     public Skill rengeration;
     public Skill muscleBoots;
@@ -26,10 +27,12 @@ public class Skill
 {
     public SkillType Type;
     public int skillPoint;
-    protected int maxSkillPoints;
+    public int maxSkillPoints = 18;
 
     public void UpdateSkill(Soldier soldier, int amount)
     {
+        if (skillPoint + amount > maxSkillPoints) amount = 0;
+       
         skillPoint += amount;
         switch (Type)
         {

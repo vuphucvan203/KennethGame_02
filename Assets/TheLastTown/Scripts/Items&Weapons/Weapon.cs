@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class Weapon : KennMonoBehaviour
 {
     [SerializeField] protected WeaponType type;
+    public WeaponType Type => type;
     [SerializeField] protected int damage;
 
     public string GetInfor()

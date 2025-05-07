@@ -18,9 +18,12 @@ public enum ItemType
 
 public abstract class Item : KennMonoBehaviour
 {
+    [SerializeField] protected Sprite sprite;
+    public Sprite Sprite => sprite;
     [SerializeField] protected ItemType type;
     public ItemType Type => type;
     [SerializeField] protected int price;
+    public int Price => price;
     public bool isPickupable = false;
     public bool startDelay;
     public float timer;

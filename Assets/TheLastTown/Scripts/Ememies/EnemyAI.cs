@@ -137,7 +137,6 @@ public abstract class EnemyAI : KennMonoBehaviour
 
     protected void FollowTarget(Vector3 target)
     {
-        SoundManager.Instance.PlaySFXEffect(SFXEffectType.ZombieBreath);
         float distance = Vector3.Distance(transform.position, target);
         if (distance < attackLimit)
         {

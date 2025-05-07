@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SoldierStateEvent : MonoBehaviour
@@ -67,6 +69,16 @@ public class SoldierStateEvent : MonoBehaviour
 
     public void DisableFlamethrower()
     {
+        List<Weapon> weapons = Player.Instance.controller.Soldier.inventory.WeaponOwner;
+        Flamethrower flamethrower = weapons.FirstOrDefault(w => w.Type == WeaponType.Flamethrower) as Flamethrower;
+        if (flamethrower != null)
+        {
+            flamethrower.UseWeapon(Player.Instance);
+        }
+        else
+        {
+            Debug.Log("Flamethrow is not found!");
+        }
         colliders[2].gameObject.SetActive(false);
     }
 
@@ -79,6 +91,16 @@ public class SoldierStateEvent : MonoBehaviour
 
     public void DisableGun()
     {
+        List<Weapon> weapons = Player.Instance.controller.Soldier.inventory.WeaponOwner;
+        BulletGun gun = weapons.FirstOrDefault(w => w.Type == WeaponType.Gun) as BulletGun;
+        if (gun != null)
+        {
+            gun.UseWeapon(Player.Instance);
+        }
+        else
+        {
+            Debug.Log("Gun is not found!");
+        }
         raycasts[0].gameObject.SetActive(false);
     }
 
@@ -93,6 +115,16 @@ public class SoldierStateEvent : MonoBehaviour
 
     public void DisableRiffle()
     {
+        List<Weapon> weapons = Player.Instance.controller.Soldier.inventory.WeaponOwner;
+        BulletGun riffle = weapons.FirstOrDefault(w => w.Type == WeaponType.Riffle) as BulletGun;
+        if (riffle != null)
+        {
+            riffle.UseWeapon(Player.Instance);
+        }
+        else
+        {
+            Debug.Log("Riffle is not found!");
+        }
         raycasts[1].gameObject.SetActive(false);
     }
 }

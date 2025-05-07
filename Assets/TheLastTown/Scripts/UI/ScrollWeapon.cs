@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class ScrollWeapon : KennMonoBehaviour
 {
     [SerializeField] protected ScrollRect scrollRect;
-    [SerializeField] protected List<RectTransform> weapons;
+    [SerializeField] protected List<Image> weapons;
+    [SerializeField] protected List<Weapon> weaponEquip;
     public WeaponType selectedWeapon;
     protected int selectedWeaponIndex;
     public bool isChanged;
@@ -18,6 +19,8 @@ public class ScrollWeapon : KennMonoBehaviour
 
     private void Update()
     {
+        
+        UpdateWeaponStorage();
         FindSelectedWeapon();
     }
 
@@ -27,11 +30,37 @@ public class ScrollWeapon : KennMonoBehaviour
         scrollRect = GetComponent<ScrollRect>();
         for (int i = 0; i < scrollRect.content.childCount; i++)
         {
-            RectTransform weapon = scrollRect.content.GetChild(i).GetComponent<RectTransform>();
+            Image weapon = scrollRect.content.GetChild(i).GetComponent<Image>();
             if (weapons.Contains(weapon)) return;
             weapons.Add(weapon);
         }
     }
+
+    protected void UpdateWeaponStorage()
+    {
+        weaponEquip = Player.Instance.controller.Soldier.inventory.WeaponOwner;
+        foreach (var weapon in weaponEquip)
+        {
+            switch (weapon.Type)
+            {
+                case WeaponType.Knife:
+                    weapons[0].enabled = true;
+                    break;
+                case WeaponType.Bat:
+                    weapons[1].enabled = true;
+                    break;
+                case WeaponType.Gun:
+                    weapons[2].enabled = true;
+                    break;
+                case WeaponType.Riffle:
+                    weapons[3].enabled = true;
+                    break;
+                case WeaponType.Flamethrower:
+                    weapons[4].enabled = true;
+                    break;
+            }
+        }
+    }    
 
     protected void FindSelectedWeapon()
     {
@@ -39,7 +68,7 @@ public class ScrollWeapon : KennMonoBehaviour
         int selectedIndex = 0;
         for (int i = 0; i < weapons.Count; i++)
         {
-            float weaponPos = scrollRect.content.anchoredPosition.x + weapons[i].anchoredPosition.x;
+            float weaponPos = scrollRect.content.anchoredPosition.x + weapons[i].rectTransform.anchoredPosition.x;
             float distance = Mathf.Abs(scrollRect.content.rect.width / 2 - weaponPos);
             if (distance < minDistance)
             {
@@ -55,27 +84,34 @@ public class ScrollWeapon : KennMonoBehaviour
         }    
         for (int i = 0; i < weapons.Count; i++)
         {
-            if (i == selectedWeaponIndex) weapons[i].localScale = new Vector2(1.7f, 1.7f);
-            else weapons[i].localScale = Vector2.one;
+            if (i == selectedWeaponIndex) weapons[i].rectTransform.localScale = new Vector2(2, 2);
+            else weapons[i].rectTransform.localScale = Vector2.one;
         }
 
+        WeaponType type = selectedWeapon;
         switch(selectedWeaponIndex)
         {
             case 0:
-                selectedWeapon = WeaponType.Riffle;
+                type = WeaponType.Knife;
                 break;
             case 1:
-                selectedWeapon = WeaponType.Gun;
+                type = WeaponType.Bat;
                 break;
             case 2:
-                selectedWeapon = WeaponType.Knife;
+                type = WeaponType.Gun;
                 break;
             case 3:
-                selectedWeapon = WeaponType.Bat;
+                type = WeaponType.Riffle;
                 break;
             case 4:
-                selectedWeapon = WeaponType.Flamethrower;
+                type = WeaponType.Flamethrower;
                 break;
+        }
+
+        Weapon weapon = weaponEquip.Find(x => x.Type == type);
+        if (weapon != null)
+        {
+            selectedWeapon = weapon.Type;
         }
     }    
 }
