@@ -40,6 +40,10 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     private Vector2 input = Vector2.zero;
 
+    public bool keyboardControl = true; 
+    public float keyboardSpeed = 100f;
+    public bool isDragging = false;
+
     protected virtual void Start()
     {
         HandleRange = handleRange;
@@ -57,8 +61,31 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         handle.anchoredPosition = Vector2.zero;
     }
 
+    private void Update()
+    {
+        if (!Application.isMobilePlatform && !isDragging)
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+
+            Vector2 keyboardInput = new Vector2(h, v);
+
+            if (keyboardInput.magnitude > 1)
+                keyboardInput.Normalize();
+
+            input = keyboardInput;
+
+            // Move handle to match input
+            if (background != null && handle != null)
+            {
+                handle.anchoredPosition = input * handleRange;
+            }
+        }
+    }
+
     public virtual void OnPointerDown(PointerEventData eventData)
     {
+        isDragging = true;
         OnDrag(eventData);
     }
 
@@ -131,6 +158,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
+        isDragging = false;
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
     }
