@@ -28,7 +28,7 @@ public class MenuUI : KennMonoBehaviour
         functionPage = transform.Find("Panel/FunctionPage").GetComponent<RectTransform>();
         mainPage = transform.Find("Panel/MainPage").GetComponent<RectTransform>();
         panel = transform.Find("Panel").GetComponent<Transform>();
-        windowTitle = transform.Find("Panel/FunctionPage/WindowTitle").GetComponentInChildren<TextMeshProUGUI>();
+        windowTitle = transform.Find("Panel/FgiunctionPage/WindowTitle").GetComponentInChildren<TextMeshProUGUI>();
         if (skillsView != null || shopView != null) return;
         skillsView = Transform.FindAnyObjectByType<SkillsUI>();
         shopView = Transform.FindAnyObjectByType<ShopUI>();

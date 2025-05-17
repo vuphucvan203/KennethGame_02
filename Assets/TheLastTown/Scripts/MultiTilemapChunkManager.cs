@@ -19,7 +19,8 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
     public TileBase[] tilePalette;
 
     private Dictionary<string, Tilemap> tilemapsByName = new();
-    private Dictionary<string, Dictionary<Vector2Int, TileBase[,]>> allChunkData = new();
+    //private Dictionary<string, Dictionary<Vector2Int, TileBase[,]>> allChunkData = new();
+    private Dictionary<string, Dictionary<Vector2Int, TileCell[,]>> allChunkData = new();
     private Dictionary<string, HashSet<Vector2Int>> loadedChunksPerLayer = new();
     //private Queue<(string layerName, Vector2Int coord)> chunkLoadQueue = new();
     private Queue<Vector2Int> chunkCoordQueue = new();
@@ -47,7 +48,7 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
     }
 #endif
 
-    [ContextMenu("Extract Chunks From Tilemaps")]
+    //[ContextMenu("Extract Chunks From Tilemaps")]
     public void ExtractChunksFromAllTilemaps()
     {
         tilemapsByName.Clear();
@@ -60,7 +61,8 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
             string layerName = tilemap.gameObject.name;
             tilemapsByName[layerName] = tilemap;
 
-            var chunkDictionary = new Dictionary<Vector2Int, TileBase[,]>();
+            //var chunkDictionary = new Dictionary<Vector2Int, TileBase[,]>();
+            var chunkDictionary = new Dictionary<Vector2Int, TileCell[,]>();
             BoundsInt bounds = tilemap.cellBounds;
             for (int x = bounds.xMin; x < bounds.xMax; x++)
             {
@@ -76,11 +78,27 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
                     );
 
                     if (!chunkDictionary.ContainsKey(chunkCoord))
-                        chunkDictionary[chunkCoord] = new TileBase[chunkSize, chunkSize];
+                        //chunkDictionary[chunkCoord] = new TileBase[chunkSize, chunkSize];
+                        chunkDictionary[chunkCoord] = new TileCell[chunkSize, chunkSize];
 
                     int localX = ((x % chunkSize) + chunkSize) % chunkSize;
                     int localY = ((y % chunkSize) + chunkSize) % chunkSize;
-                    chunkDictionary[chunkCoord][localX, localY] = tile;
+
+                    Matrix4x4 matrix = tilemap.GetTransformMatrix(pos);
+                    Quaternion rot = matrix.rotation;
+                    Vector3 scale = matrix.lossyScale;
+                    Vector3 offset = matrix.MultiplyPoint3x4(Vector3.zero);
+
+                    chunkDictionary[chunkCoord][localX, localY] = new TileCell
+                    {
+                        x = localX,
+                        y = localY,
+                        tileName = tile.name,
+                        rotationZ = rot.eulerAngles.z,
+                        offset = offset,
+                        scale = scale
+                    };
+                    //chunkDictionary[chunkCoord][localX, localY] = tile;
                 }
             }
             allChunkData[layerName] = chunkDictionary;
@@ -92,6 +110,7 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
     [ContextMenu("Save Chunk Data To File")]
     public void SaveChunkDataToFile()
     {
+        ExtractChunksFromAllTilemaps();
         string path = Path.Combine(Application.persistentDataPath, "chunkData.json");
         List<TileChunkData> export = new();
 
@@ -108,10 +127,14 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
                 {
                     for (int y = 0; y < chunkSize; y++)
                     {
-                        TileBase tile = tileArray[x, y];
-                        if (tile == null) continue;
+                        //TileBase tile = tileArray[x, y];
+                        //if (tile == null) continue;
 
-                        chunk.tiles.Add(new TileCell { x = x, y = y, tileName = tile.name });
+                        //chunk.tiles.Add(new TileCell { x = x, y = y, tileName = tile.name });
+
+                        var tile = tileArray[x, y];
+                        if (tile == null) continue;
+                        chunk.tiles.Add(tile);
                     }
                 }
 
@@ -146,12 +169,22 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
             if (!allChunkData.ContainsKey(chunk.layerName))
                 allChunkData[chunk.layerName] = new();
 
-            var tileArray = new TileBase[chunkSize, chunkSize];
+            //var tileArray = new TileBase[chunkSize, chunkSize];
+            var tileArray = new TileCell[chunkSize, chunkSize];
 
             foreach (var cell in chunk.tiles)
             {
                 if (tileLibrary.TryGetValue(cell.tileName, out var tile))
-                    tileArray[cell.x, cell.y] = tile;
+                    //tileArray[cell.x, cell.y] = tile;
+                    tileArray[cell.x, cell.y] = new TileCell
+                    {
+                        x = cell.x,
+                        y = cell.y,
+                        tileName = cell.tileName,
+                        rotationZ = cell.rotationZ,
+                        offset = cell.offset,
+                        scale = cell.scale
+                    };
             }
 
             allChunkData[chunk.layerName][coord] = tileArray;
@@ -263,11 +296,12 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
         isLoadingChunks = false;
     }    
 
-    void LoadChunk(Tilemap tilemap, Dictionary<Vector2Int, TileBase[,]> chunkDict, Vector2Int chunkCoord)
+    void LoadChunk(Tilemap tilemap, Dictionary<Vector2Int, TileCell[,]> chunkDict, Vector2Int chunkCoord)
     {
         if (!chunkDict.ContainsKey(chunkCoord)) return;
 
-        TileBase[,] chunk = chunkDict[chunkCoord];
+        //TileBase[,] chunk = chunkDict[chunkCoord];
+        TileCell[,] chunk = chunkDict[chunkCoord];
         int startX = chunkCoord.x * chunkSize;
         int startY = chunkCoord.y * chunkSize;
 
@@ -275,14 +309,30 @@ public class MultiTilemapChunkManager : KennMonoBehaviour
         {
             for (int y = 0; y < chunkSize; y++)
             {
-                TileBase tile = chunk[x, y];
-                if (tile != null)
-                    tilemap.SetTile(new Vector3Int(startX + x, startY + y, 0), tile);
+                //TileBase tile = chunk[x, y];
+                //if (tile != null)
+                //    tilemap.SetTile(new Vector3Int(startX + x, startY + y, 0), tile);
+
+                var cell = chunk[x, y];
+                if (cell == null) continue;
+
+                Vector3Int pos = new(startX + x, startY + y, 0);
+                TileBase tile = tilePalette.FirstOrDefault(t => t.name == cell.tileName);
+                if (tile == null) continue;
+
+                tilemap.SetTile(pos, tile);
+
+                Matrix4x4 matrix = Matrix4x4.TRS(
+                    cell.offset,
+                    Quaternion.Euler(0, 0, cell.rotationZ),
+                    cell.scale == Vector3.zero ? Vector3.one : cell.scale
+                );
+                tilemap.SetTransformMatrix(pos, matrix);
             }
         }
     }
 
-    void UnloadChunk(Tilemap tilemap, Dictionary<Vector2Int, TileBase[,]> chunkDict, Vector2Int chunkCoord)
+    void UnloadChunk(Tilemap tilemap, Dictionary<Vector2Int, TileCell[,]> chunkDict, Vector2Int chunkCoord)
     {
         //Debug.Log($"Unload chunk: {chunkCoord}");
         if (!chunkDict.ContainsKey(chunkCoord)) return;
@@ -313,6 +363,9 @@ public class TileCell
 {
     public int x, y;
     public string tileName;
+    public float rotationZ;
+    public Vector3 offset;
+    public Vector3 scale;
 }
 
 [Serializable]

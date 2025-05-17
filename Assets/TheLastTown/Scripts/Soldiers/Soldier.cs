@@ -36,12 +36,22 @@ public abstract class Soldier : Character
     protected ISoldierAttackStrategy attackStrategy;
     public ISoldierAttackStrategy AttackStrategy => attackStrategy;
     public WeaponType currentWeapon { get; set; }
+    public bool isDead = false;
 
 
     protected Soldier(string name, BaseStats level, BaseStats experience, BaseStats health, BaseStats attack, BaseStats defense, BaseStats speed) : base(name, health, attack, defense, speed)
     {
         this.level = level;
         this.experience = experience;
+    }
+
+    private void Update()
+    {
+        if (healthStats.value <= 0 && !isDead)
+        {
+            isDead = true;
+            stateMachine.SwitchState(new SoldierDeathState(stateMachine));
+        }
     }
 
     protected override void LoadComponent()

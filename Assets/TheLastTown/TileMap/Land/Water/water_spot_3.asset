@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
+  m_Name: water_spot_3
+  m_EditorClassIdentifier: 
+  m_DefaultSprite: {fileID: 21300000, guid: f9721051db6cca4479e1141508aefa60, type: 3}
+  m_DefaultGameObject: {fileID: 0}
+  m_DefaultColliderType: 1
+  m_TilingRules:
+  - m_Id: 0
+    m_Sprites:
+    - {fileID: 21300000, guid: f9721051db6cca4479e1141508aefa60, type: 3}
+    - {fileID: 21300000, guid: 9da493cebf32fdf4bb00c530786e4b98, type: 3}
+    - {fileID: 21300000, guid: 9813adc2f54f5c04a833f8c460291cab, type: 3}
+    - {fileID: 21300000, guid: f42724ecb67d27d48a6f778301658159, type: 3}
+    - {fileID: 21300000, guid: 0c0e2fcd868b6594f9cd817336d4e3af, type: 3}
+    - {fileID: 21300000, guid: 288b3d800d879ff49a6dbddceaf29248, type: 3}
+    - {fileID: 21300000, guid: 94a93f41c39aabc4eb7bb0595fdccd9e, type: 3}
+    - {fileID: 21300000, guid: 39b8f4129cc56134999d256c6311cf8a, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    m_GameObject: {fileID: 0}
+    m_MinAnimationSpeed: 1
+    m_MaxAnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_Output: 1
+    m_ColliderType: 1
+    m_RandomTransform: 0
+    m_Neighbors: 
+    m_NeighborPositions:
+    - {x: -1, y: 1, z: 0}
+    - {x: 0, y: 1, z: 0}
+    - {x: 1, y: 1, z: 0}
+    - {x: -1, y: 0, z: 0}
+    - {x: 1, y: 0, z: 0}
+    - {x: -1, y: -1, z: 0}
+    - {x: 0, y: -1, z: 0}
+    - {x: 1, y: -1, z: 0}
+    m_RuleTransform: 0
